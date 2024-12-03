@@ -1,5 +1,6 @@
 use itertools::Itertools;
 use num_traits::signum;
+use rayon::prelude::*;
 
 advent_of_code::solution!(2);
 
@@ -33,7 +34,7 @@ fn is_valid_two(nums: &[i64]) -> bool {
 pub fn part_one(input: &str) -> Option<usize> {
     Some(
         input
-            .lines()
+            .par_lines()
             .filter(|line| {
                 is_valid(
                     &line
@@ -49,7 +50,7 @@ pub fn part_one(input: &str) -> Option<usize> {
 pub fn part_two(input: &str) -> Option<usize> {
     Some(
         input
-            .lines()
+            .par_lines()
             .filter(|line| {
                 is_valid_two(
                     &line
