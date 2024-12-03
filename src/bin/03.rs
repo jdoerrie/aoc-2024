@@ -16,8 +16,28 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
+    let re =
+        r"(?<mul>mul\((?<lhs>[0-9]{1,3}),(?<rhs>[0-9]{1,3})\))|(?<do>do\(\))|(?<dont>don't\(\))";
     let mut on = true;
-    Some( Regex::new(r"(?<mul>mul\((?<lhs>[0-9]{1,3}),(?<rhs>[0-9]{1,3})\))|(?<do>do\(\))|(?<dont>don't\(\))") .unwrap() .captures_iter(input) .map(|caps| { if caps.name("do").is_some() { on = true; 0 } else if caps.name("dont").is_some() { on = false; 0 } else if on { caps.name("lhs").unwrap().as_str().parse::<u32>().unwrap() * caps.name("rhs").unwrap().as_str().parse::<u32>().unwrap() } else { 0} }) .sum(),)
+    Some(
+        Regex::new(re)
+            .unwrap()
+            .captures_iter(input)
+            .flat_map(|caps| {
+                on = (on || caps.name("do").is_some()) && (caps.name("dont").is_none());
+                if on && caps.name("mul").is_some() {
+                    Some(
+                        ["lhs", "rhs"]
+                            .into_iter()
+                            .flat_map(|name| caps.name(name).unwrap().as_str().parse::<u32>())
+                            .product::<u32>(),
+                    )
+                } else {
+                    None
+                }
+            })
+            .sum(),
+    )
 }
 
 #[cfg(test)]
