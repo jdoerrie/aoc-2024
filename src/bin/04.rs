@@ -70,7 +70,7 @@ pub fn part_two(input: &str) -> Option<usize> {
         .collect();
     Some(
         mases
-            .iter()
+            .par_iter()
             .filter(|x| match x {
                 ((x, y), (1, -1)) => {
                     mases.contains(&((x + 2, *y), (-1, -1)))
