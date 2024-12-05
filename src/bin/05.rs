@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{cmp::Ordering, collections::HashSet};
 
 use itertools::Itertools;
 use rayon::prelude::*;
@@ -51,12 +51,13 @@ pub fn part_two(input: &str) -> Option<u32> {
                     .all(|(u, v)| graph.contains(&(*u, *v)))
             })
             .map(|mut v| {
-                while let Some((i, j)) = (0..v.len())
-                    .tuple_combinations()
-                    .find(|(i, j)| !graph.contains(&(v[*i], v[*j])))
-                {
-                    v.swap(i, j);
-                }
+                v.sort_by(|u, v| {
+                    if graph.contains(&(*u, *v)) {
+                        Ordering::Less
+                    } else {
+                        Ordering::Greater
+                    }
+                });
                 v
             })
             .map(|v| v[v.len() / 2])
