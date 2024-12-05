@@ -20,11 +20,7 @@ pub fn part_one(input: &str) -> Option<u32> {
         pages
             .par_lines()
             .map(|page| page.split(',').flat_map(|u| u.parse::<u32>()).collect_vec())
-            .filter(|nums| {
-                nums.iter()
-                    .tuple_windows()
-                    .all(|(u, v)| graph.contains(&(*u, *v)))
-            })
+            .filter(|nums| nums.is_sorted_by(|u, v| graph.contains(&(*u, *v))))
             .map(|v| v[v.len() / 2])
             .sum(),
     )
@@ -44,12 +40,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         pages
             .par_lines()
             .map(|page| page.split(',').flat_map(|u| u.parse::<u32>()).collect_vec())
-            .filter(|nums| {
-                !nums
-                    .iter()
-                    .tuple_windows()
-                    .all(|(u, v)| graph.contains(&(*u, *v)))
-            })
+            .filter(|nums| !nums.is_sorted_by(|u, v| graph.contains(&(*u, *v))))
             .map(|mut v| {
                 let index = v.len() / 2;
                 *v.select_nth_unstable_by(index, |u, v| {
