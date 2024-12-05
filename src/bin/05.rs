@@ -22,7 +22,7 @@ pub fn part_one(input: &str) -> Option<u32> {
             .map(|page| page.split(',').flat_map(|u| u.parse::<u32>()).collect_vec())
             .filter(|nums| {
                 nums.iter()
-                    .tuple_combinations()
+                    .tuple_windows()
                     .all(|(u, v)| graph.contains(&(*u, *v)))
             })
             .map(|v| v[v.len() / 2])
@@ -47,20 +47,20 @@ pub fn part_two(input: &str) -> Option<u32> {
             .filter(|nums| {
                 !nums
                     .iter()
-                    .tuple_combinations()
+                    .tuple_windows()
                     .all(|(u, v)| graph.contains(&(*u, *v)))
             })
             .map(|mut v| {
-                v.sort_by(|u, v| {
+                let index = v.len() / 2;
+                *v.select_nth_unstable_by(index, |u, v| {
                     if graph.contains(&(*u, *v)) {
                         Ordering::Less
                     } else {
                         Ordering::Greater
                     }
-                });
-                v
+                })
+                .1
             })
-            .map(|v| v[v.len() / 2])
             .sum(),
     )
 }
