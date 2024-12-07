@@ -62,7 +62,7 @@ pub fn part_one(input: &str) -> Option<u64> {
 pub fn part_two(input: &str) -> Option<u64> {
     Some(
         input
-            .lines()
+            .par_lines()
             .filter_map(|line| line.split_once(": "))
             .map(|(goal, nums)| {
                 (
