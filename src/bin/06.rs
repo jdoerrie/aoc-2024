@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use itertools::Itertools;
 use rayon::prelude::*;
 
 advent_of_code::solution!(6);
@@ -19,13 +18,7 @@ fn guard_pos(
         if trees.contains(&(x, y)) {
             x -= dx;
             y -= dy;
-            (dx, dy) = match (dx, dy) {
-                (-1, 0) => (0, 1),
-                (0, 1) => (1, 0),
-                (1, 0) => (0, -1),
-                (0, -1) => (-1, 0),
-                _ => unreachable!(),
-            };
+            (dx, dy) = (dy, -dx);
         }
 
         if x < 0 || x > max_x || y < 0 || y > max_y {
@@ -74,13 +67,7 @@ fn is_infinite_loop(
         if trees.contains(&(x, y)) || obs == (x, y) {
             x -= dx;
             y -= dy;
-            (dx, dy) = match (dx, dy) {
-                (-1, 0) => (0, 1),
-                (0, 1) => (1, 0),
-                (1, 0) => (0, -1),
-                (0, -1) => (-1, 0),
-                _ => unreachable!(),
-            };
+            (dx, dy) = (dy, -dx);
         }
 
         if x < 0 || x > max_x || y < 0 || y > max_y {
@@ -109,13 +96,10 @@ pub fn part_two(input: &str) -> Option<usize> {
         }
     }
 
-    let work = guard_pos(pos, (max_x, max_y), &trees)
-        .into_iter()
-        .filter(|xy| *xy != pos)
-        .collect_vec();
     Some(
-        work.into_par_iter()
-            .filter(|obs| is_infinite_loop(pos, (max_x, max_y), &trees, *obs))
+        guard_pos(pos, (max_x, max_y), &trees)
+            .into_par_iter()
+            .filter(|obs| *obs != pos && is_infinite_loop(pos, (max_x, max_y), &trees, *obs))
             .count(),
     )
 }
