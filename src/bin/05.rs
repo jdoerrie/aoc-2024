@@ -1,5 +1,6 @@
-use std::{cmp::Ordering, collections::HashSet};
+use std::cmp::Ordering;
 
+use hashbrown::HashSet;
 use itertools::Itertools;
 use rayon::prelude::*;
 use tuple::Map;
