@@ -54,30 +54,6 @@ pub fn part_one(input: &str) -> Option<usize> {
         }
     }
 
-    let mut all_pos = HashSet::new();
-    let (mut x, mut y) = pos;
-    let (mut dx, mut dy) = (-1, 0);
-    loop {
-        all_pos.insert((x, y));
-        x += dx;
-        y += dy;
-        if trees.contains(&(x, y)) {
-            x -= dx;
-            y -= dy;
-            (dx, dy) = match (dx, dy) {
-                (-1, 0) => (0, 1),
-                (0, 1) => (1, 0),
-                (1, 0) => (0, -1),
-                (0, -1) => (-1, 0),
-                _ => unreachable!(),
-            };
-        }
-
-        if x < 0 || x > max_x || y < 0 || y > max_y {
-            break;
-        }
-    }
-
     Some(guard_pos(pos, (max_x, max_y), &trees).len())
 }
 
