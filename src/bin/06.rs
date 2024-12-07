@@ -98,7 +98,9 @@ pub fn part_two(input: &str) -> Option<usize> {
 
     Some(
         guard_pos(pos, (max_x, max_y), &trees)
-            .into_iter().collect_vec().into_par_iter()
+            .into_iter()
+            .collect_vec()
+            .into_par_iter()
             .filter(|obs| *obs != pos && is_infinite_loop(pos, (max_x, max_y), &trees, *obs))
             .count(),
     )

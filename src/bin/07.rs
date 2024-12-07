@@ -9,9 +9,9 @@ fn solve_one(goal: u64, curr: u64, nums: &[u64]) -> bool {
     }
 
     if let Some((num, rest)) = nums.split_first() {
-        return solve_one(goal, curr + num, rest) || solve_one(goal, curr * num, rest);
+        solve_one(goal, curr + num, rest) || solve_one(goal, curr * num, rest)
     } else {
-        return goal == curr;
+        goal == curr
     }
 }
 
@@ -26,11 +26,11 @@ fn solve_two(goal: u64, curr: u64, nums: &[u64]) -> bool {
             rounded *= 10;
         }
 
-        return solve_two(goal, curr + num, rest)
+        solve_two(goal, curr + num, rest)
             || solve_two(goal, curr * num, rest)
-            || solve_two(goal, curr * rounded + num, rest);
+            || solve_two(goal, curr * rounded + num, rest)
     } else {
-        return goal == curr;
+        goal == curr
     }
 }
 
